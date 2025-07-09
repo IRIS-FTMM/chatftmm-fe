@@ -4,6 +4,12 @@ import Sidebar from './components/Sidebar';
 import ChatBox from './components/ChatBox';
 import ChatInput from './components/ChatInput';
 
+// --- PERUBAHAN DI SINI ---
+// Ambil URL API dari environment variable VITE_API_BASE_URL.
+// Jika tidak ada (saat development lokal), gunakan alamat default 'http://127.0.0.1:8000'.
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
+// --- AKHIR PERUBAHAN ---
+
 const WelcomeScreen = () => (
   <div className="flex flex-col items-center justify-center text-center p-4">
     <img 
@@ -63,7 +69,10 @@ function App() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/chat', {
+      // --- PERUBAHAN DI SINI ---
+      // Gunakan variabel API_BASE_URL yang sudah kita definisikan di atas.
+      const response = await fetch(`${API_BASE_URL}/api/chat`, {
+      // --- AKHIR PERUBAHAN ---
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: messageContent }),
