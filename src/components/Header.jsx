@@ -21,7 +21,7 @@ export default function Header({ onToggleSidebar }) {
               e.currentTarget.style.display = 'none';
             }}
           />
-          <h1 className="font-bold text-ftmm-prussian">FTMM Chatbot</h1>
+          <h1 className="font-bold text-ftmm-pompadour">FTMM Chatbot</h1>
         </div>
       </div>
     </header>

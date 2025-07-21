@@ -1,64 +1,60 @@
 import React from 'react';
 import { Plus, MessageCircle, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function Sidebar({ 
   isOpen, 
-  onToggle, // Prop ini sekarang hanya untuk tombol 'X' (tutup)
+  onToggle, 
   onNewChat, 
   chatHistory, 
   selectedChatId, 
   onSelectChat 
 }) {
+  const { t } = useTranslation();
+
   return (
-    // KONSEP BARU: Sidebar menggunakan transisi lebar (width), bukan transform.
-    // Ini membuatnya menjadi bagian dari layout, bukan lapisan di atas.
     <aside className={`
       flex-shrink-0 bg-white shadow-lg 
       transition-all duration-300 ease-in-out
       ${isOpen ? 'w-64' : 'w-0'}
       overflow-hidden
     `}>
-      {/* Wrapper ini menjaga agar konten tidak rusak saat transisi lebar */}
       <div className="w-64 h-full flex flex-col">
         {/* Header Sidebar */}
         <div className="bg-ftmm-gradient p-4 relative">
           <button
-            onClick={onToggle} // Tombol 'X' untuk menutup sidebar
+            onClick={onToggle}
             className="absolute top-4 right-4 p-1 rounded-md text-white hover:bg-white hover:bg-opacity-20 transition-colors"
           >
             <X size={20} />
           </button>
-          
           <div className="flex items-center space-x-3 mb-4">
             <img 
-              src="/logo-ftmm.png" 
-              alt="FTMM Logo" 
-              className="w-10 h-10 rounded-lg" // Latar belakang putih sudah dihapus
+              src="/Kepala Sirion.png"
+              alt="Chatbot Logo" 
+              className="w-10 h-10 rounded-lg"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
               }}
             />
             <div>
-              <h1 className="text-white font-bold text-lg">FTMM</h1>
-              <p className="text-white text-sm opacity-90">Chatbot Assistant</p>
+              <h1 className="text-white font-bold text-lg">{t('assistant_title')}</h1>
+              <p className="text-white text-sm opacity-90">{t('header')}</p>
             </div>
           </div>
-          
           <button
             onClick={onNewChat}
             className="w-full bg-white bg-opacity-20 text-white py-2 px-4 rounded-lg hover:bg-opacity-30 transition-colors flex items-center justify-center space-x-2"
           >
             <Plus size={16} />
-            <span>New Chat</span>
+            <span>{t('new_chat')}</span>
           </button>
         </div>
-        
         {/* Riwayat Chat */}
         <div className="flex-1 overflow-y-auto p-4">
           <h2 className="text-sm font-semibold text-gray-600 mb-3 uppercase tracking-wide">
-            Recent Chats
+            {t('recent_chats')}
           </h2>
-          
           <div className="space-y-2">
             {chatHistory.map((chat) => (
               <button
