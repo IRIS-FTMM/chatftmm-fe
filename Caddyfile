@@ -1,0 +1,15 @@
+:80 {
+    # Menetapkan root direktori untuk file statis
+    root * /srv
+
+    # Mengaktifkan kompresi gzip untuk performa lebih baik
+    encode gzip
+
+    # Konfigurasi ini penting untuk Single Page Application (SPA) seperti React
+    # Jika ada request ke path yang tidak ditemukan (misal /chat/123),
+    # ia akan dialihkan ke index.html agar React Router bisa menanganinya.
+    try_files {path} /index.html
+
+    # Menjalankan file server
+    file_server
+}

@@ -1,0 +1,35 @@
+# --- TAHAP 1: Build Stage ---
+# Menggunakan image Node.js versi 18 untuk membangun aplikasi React
+FROM node:18 AS build
+
+# Menetapkan direktori kerja
+WORKDIR /app
+
+# Menyalin file package.json dan package-lock.json
+COPY package*.json ./
+
+# Meng-install semua dependensi proyek
+RUN npm ci
+
+# Menyalin semua sisa kode frontend
+COPY . .
+
+# Menjalankan perintah build untuk membuat file statis
+RUN npm run build
+
+# --- TAHAP 2: Production Stage ---
+# Menggunakan image web server Caddy yang sangat ringan dan modern
+FROM caddy:2-alpine
+
+# Menghapus file konfigurasi Caddy default
+RUN rm /etc/caddy/Caddyfile
+
+# Menyalin file Caddyfile kustom kita
+COPY Caddyfile /etc/caddy/Caddyfile
+
+# Menyalin hasil build dari tahap sebelumnya (folder 'dist')
+# ke folder root dari web server Caddy
+COPY --from=build /app/dist /srv
+
+# Memberitahu Docker bahwa Caddy akan berjalan di port 80
+EXPOSE 80
