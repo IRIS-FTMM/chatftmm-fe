@@ -7,8 +7,8 @@ import ReactMarkdown from 'react-markdown';
 // Komponen untuk Avatar Bot (tidak perlu diubah)
 const BotAvatar = ({ messageType }) => {
   const getInitialAvatar = () => {
-    if (messageType === 'success') return '/Sirion Berbicara.mp4';
-    if (messageType === 'error') return '/Sirion Sedih.mp4';
+    if (messageType === 'success') return '/Sirion Berbicara.webm';
+    if (messageType === 'error') return '/Sirion Sedih.webm';
     return '/Sirion Bisa Jawab.png';
   };
   
@@ -19,12 +19,12 @@ const BotAvatar = ({ messageType }) => {
   }, [messageType]);
 
   const handleVideoEnd = () => {
-    if (avatarSrc === '/Sirion Berbicara.mp4') {
+    if (avatarSrc === '/Sirion Berbicara.webm') {
       setAvatarSrc('/Sirion Bisa Jawab.png');
     }
   };
 
-  const isVideo = avatarSrc.endsWith('.mp4');
+  const isVideo = avatarSrc.endsWith('.webm');
 
   return (
     <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-ftmm-silver overflow-hidden">
@@ -34,7 +34,7 @@ const BotAvatar = ({ messageType }) => {
           src={avatarSrc}
           autoPlay
           muted
-          loop={avatarSrc !== '/Sirion Berbicara.mp4'}
+          loop={avatarSrc !== '/Sirion Berbicara.webm'}
           onEnded={handleVideoEnd}
           className="w-full h-full object-cover"
         />

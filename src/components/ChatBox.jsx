@@ -5,7 +5,7 @@ const LoadingIndicator = () => (
   <div className="flex items-start space-x-3 p-4">
     <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-ftmm-silver overflow-hidden">
       <video
-        src="/Sirion Mikir.mp4"
+        src="/Sirion Mikir.webm"
         autoPlay
         loop
         muted
