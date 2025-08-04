@@ -1,10 +1,12 @@
-// src/components/ChatInput.jsx
-
+// =======================================================================
+// --- FILE: frontend/src/components/ChatInput.jsx (REVISED) ---
+// Added a new prop `onTyping` to notify the parent component when the user types.
+// =======================================================================
 import React, { useState, useRef, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-export default function ChatInput({ onSendMessage, isLoading }) {
+export default function ChatInput({ onSendMessage, isLoading, onTyping }) { // Added onTyping
   const [message, setMessage] = useState('');
   const textareaRef = useRef(null);
   const { t } = useTranslation();
@@ -15,6 +17,13 @@ export default function ChatInput({ onSendMessage, isLoading }) {
       onSendMessage(message.trim());
       setMessage('');
     }
+  };
+  
+  const handleInputChange = (e) => {
+      setMessage(e.target.value);
+      if (onTyping) { // --- NEW: Call onTyping when input changes
+          onTyping();
+      }
   };
 
   const handleKeyPress = (e) => {
@@ -39,19 +48,10 @@ export default function ChatInput({ onSendMessage, isLoading }) {
       <textarea
         ref={textareaRef}
         value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        onChange={handleInputChange} // --- MODIFIED: Use new handler
         onKeyPress={handleKeyPress}
         placeholder={t('type_here')}
-        className={`
-          flex-1 bg-transparent px-2 py-2 focus:outline-none resize-none
-          transition-colors duration-200
-          
-          /* --- KUNCI PERBAIKAN ADA DI SINI --- */
-          disabled:bg-gray-50 
-          disabled:text-gray-500 
-          disabled:cursor-not-allowed
-          /* --------------------------------- */
-        `}
+        className="flex-1 bg-transparent px-2 py-2 focus:outline-none resize-none transition-colors duration-200 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
         rows={1}
         maxLength={10000}
         disabled={isLoading}
@@ -60,13 +60,7 @@ export default function ChatInput({ onSendMessage, isLoading }) {
       <button
         type="submit"
         disabled={!message.trim() || isLoading}
-        className={`
-          ml-2 flex-shrink-0 p-2 rounded-full transition-colors
-          ${message.trim() && !isLoading
-            ? 'bg-ftmm-pompadour text-white hover:bg-opacity-90' 
-            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          }
-        `}
+        className={`ml-2 flex-shrink-0 p-2 rounded-full transition-colors ${message.trim() && !isLoading ? 'bg-ftmm-pompadour text-white hover:bg-opacity-90' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
         style={{ marginBottom: '4px' }}
       >
         <Send size={20} />

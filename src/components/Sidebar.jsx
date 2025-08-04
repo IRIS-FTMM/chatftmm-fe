@@ -20,7 +20,7 @@ export default function Sidebar({
       overflow-hidden
     `}>
       <div className="w-64 h-full flex flex-col">
-        {/* Header Sidebar */}
+        {/* Sidebar Header */}
         <div className="bg-ftmm-gradient p-4 relative">
           <button
             onClick={onToggle}
@@ -50,7 +50,7 @@ export default function Sidebar({
             <span>{t('new_chat')}</span>
           </button>
         </div>
-        {/* Riwayat Chat */}
+        {/* Chat History */}
         <div className="flex-1 overflow-y-auto p-4">
           <h2 className="text-sm font-semibold text-gray-600 mb-3 uppercase tracking-wide">
             {t('recent_chats')}
