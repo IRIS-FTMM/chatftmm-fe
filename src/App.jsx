@@ -1,10 +1,3 @@
-// =======================================================================
-// --- FILE: frontend/src/App.jsx (REVISED) ---
-// This is the main component with the most significant changes.
-// It now manages conversation history, sends it to the backend,
-// and handles the proactive follow-up timer.
-// =======================================================================
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu } from 'lucide-react';
 import Sidebar from './components/Sidebar';
@@ -50,7 +43,6 @@ function App() {
   const [messages, setMessages] = useState([]);
   const { t } = useTranslation();
   
-  // --- NEW: Ref to hold the timer for proactive feedback ---
   const followUpTimer = useRef(null);
 
   useEffect(() => {
@@ -61,7 +53,6 @@ function App() {
     }
   }, [selectedChatId, allChats]);
 
-  // --- NEW: Function to handle proactive follow-up message ---
   const sendFollowUpMessage = () => {
     if (!selectedChatId || isLoading) return;
 
@@ -75,7 +66,6 @@ function App() {
 
     setAllChats(prev => {
         const currentMessages = prev[selectedChatId] || [];
-        // Avoid sending multiple follow-ups
         if (currentMessages.length > 0 && currentMessages[currentMessages.length - 1].id === followUpMessage.id) {
             return prev;
         }
@@ -86,7 +76,6 @@ function App() {
 
 
   const handleSendMessage = async (messageContent) => {
-    // --- MODIFIED: Clear any existing follow-up timer when user sends a message ---
     clearTimeout(followUpTimer.current);
 
     const userMessage = {
@@ -107,10 +96,8 @@ function App() {
       const initialMessages = [userMessage];
       setAllChats(prev => ({ ...prev, [currentChatId]: initialMessages }));
       setMessages(initialMessages);
-      // History is empty for the first message
       historyForAPI = [];
     } else {
-      // --- MODIFIED: Prepare history before adding the new user message ---
       historyForAPI = allChats[currentChatId] || [];
       const updatedMessages = [...historyForAPI, userMessage];
       setAllChats(prev => ({ ...prev, [currentChatId]: updatedMessages }));
@@ -120,13 +107,12 @@ function App() {
     setIsLoading(true);
 
     try {
-      // --- MODIFIED: Send conversation history along with the query ---
       const response = await fetch(`${API_BASE_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
             query: messageContent,
-            history: historyForAPI.map(msg => ({ // Send a simplified history
+            history: historyForAPI.map(msg => ({
                 role: msg.isUser ? 'user' : 'assistant',
                 content: msg.content
             }))
@@ -153,8 +139,7 @@ function App() {
         return { ...prev, [currentChatId]: updatedMessages };
       });
 
-      // --- NEW: Start the timer for a follow-up message after a successful response ---
-      followUpTimer.current = setTimeout(sendFollowUpMessage, 10000); // 10 seconds
+      followUpTimer.current = setTimeout(sendFollowUpMessage, 10000);
 
     } catch (error) {
       console.error("Could not fetch AI response:", error);
@@ -184,13 +169,14 @@ function App() {
     setSidebarOpen(true);
   };
 
-  // --- NEW: Function to handle user typing, to cancel the follow-up timer ---
   const handleUserTyping = () => {
       clearTimeout(followUpTimer.current);
   };
 
   return (
-    <div className="flex min-h-screen bg-white font-sans">
+    // [FIX 1] Ganti 'min-h-screen' menjadi 'h-screen' dan tambahkan 'overflow-hidden'.
+    // Ini memaksa tinggi aplikasi menjadi 100% tinggi layar dan mencegah seluruh halaman untuk scroll.
+    <div className="flex h-screen bg-white font-sans overflow-hidden">
       <Sidebar
         isOpen={sidebarOpen}
         onToggle={() => setSidebarOpen(false)}
@@ -208,13 +194,16 @@ function App() {
             {selectedChatId ? chatHistory.find(c => c.id === selectedChatId)?.title : t('new_chat')}
           </h1>
         </header>
-        <main className="flex-1 flex flex-col">
+        
+        {/* [FIX 2] Struktur main diubah untuk memastikan area input selalu terlihat. */}
+        <div className="flex-1 flex flex-col overflow-hidden">
           {messages.length === 0 && !isLoading ? (
-            <div className="flex-1 flex flex-col items-center justify-center">
+            // Layout untuk Welcome Screen
+            <div className="flex-1 flex flex-col justify-between">
               <div className="flex-1 flex items-center justify-center -mt-16">
                 <WelcomeScreen />
               </div>
-              <div className="w-full p-4">
+              <div className="p-4">
                 <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} onTyping={handleUserTyping} />
                 <footer className="text-center text-xs text-gray-400 pt-2">
                   {t('ai_generated')}
@@ -222,9 +211,11 @@ function App() {
               </div>
             </div>
           ) : (
+            // Layout untuk Chat Aktif
             <>
+              {/* [FIX 3] ChatBox sekarang akan mengambil sisa ruang dan menjadi satu-satunya yang bisa scroll. */}
               <ChatBox messages={messages} isLoading={isLoading} />
-              <div className="w-full p-4 flex-shrink-0">
+              <div className="p-4 flex-shrink-0">
                 <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} onTyping={handleUserTyping} />
                 <footer className="text-center text-xs text-gray-400 pt-2">
                   {t('ai_generated')}
@@ -232,7 +223,7 @@ function App() {
               </div>
             </>
           )}
-        </main>
+        </div>
       </div>
     </div>
   );
