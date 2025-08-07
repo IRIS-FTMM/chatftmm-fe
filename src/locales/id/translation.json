@@ -1,6 +1,6 @@
 {
   "assistant_title": "Asisten Chatbot FTMM",
-  "welcome": "Selamat datang di Chatbot FTMM!\nAda yang bisa saya bantu?",
+  "welcome": "Halo! Saya Cirion, asisten virtual FTMM.\nTanyakan apa saja seputar fakultas, mulai dari info prodi sampai kegiatan mahasiswa. Saya siap membantu!",
   "follow_up_prompt": "Ada lagi yang bisa saya bantu?",
   "ai_error": "Maaf, terjadi masalah saat menyambung ke server. Silakan coba lagi nanti.",
   "new_chat": "Obrolan Baru",
