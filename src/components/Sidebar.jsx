@@ -38,8 +38,10 @@ export default function Sidebar({
               }}
             />
             <div>
-              <h1 className="text-white font-bold text-lg">{t('assistant_title')}</h1>
-              <p className="text-white text-sm opacity-90">{t('header')}</p>
+              {/* --- PERUBAHAN 1: Mengubah nama aplikasi --- */}
+              <h1 className="text-white font-bold text-lg">ChatFTMM</h1>
+              {/* --- PERUBAHAN 2: Menghapus paragraf 'header' --- */}
+              {/* <p className="text-white text-sm opacity-90">{t('header')}</p> <-- BARIS INI DIHAPUS */}
             </div>
           </div>
           <button

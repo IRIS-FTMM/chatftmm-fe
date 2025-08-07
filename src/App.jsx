@@ -17,8 +17,9 @@ const WelcomeScreen = () => {
         alt="Sirion Menyapa"
         className="w-32 h-32 mb-6"
       />
+      {/* --- PERUBAHAN 3: Mengubah judul di welcome screen --- */}
       <h2 className="text-3xl font-bold text-ftmm-prussian">
-        {t('assistant_title')}
+        ChatFTMM
       </h2>
       <p className="text-gray-500 mt-2">
         {t('welcome')
